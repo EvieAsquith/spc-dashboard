@@ -73,5 +73,3 @@ ax.set_title("SPC Chart")
 ax.legend()
 st.pyplot(fig)
 
-else:
-    st.info("No data for this machine yet.")
