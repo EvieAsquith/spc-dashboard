@@ -49,20 +49,29 @@ if not df_machine.empty:
     fig, ax = plt.subplots(figsize=(10, 4))
     ax.plot(df_machine["Timestamp"], df_machine["Deviation"], marker='o', label="Deviation")
 
-    mean = df_machine["Deviation"].mean()
-    std = df_machine["Deviation"].std()
-    ucl = mean + 3 * std
-    lcl = mean - 3 * std
+    # Calculate statistics
+mean = df['Recorded Dimension'].mean()
+std_dev = df['Recorded Dimension'].std()
+ucl = mean + 3 * std_dev
+lcl = mean - 3 * std_dev
 
-    ax.axhline(mean, color='green', linestyle='--', label="Mean")
-    ax.axhline(ucl, color='red', linestyle='--', label="UCL")
-    ax.axhline(lcl, color='red', linestyle='--', label="LCL")
+# Display calculated stats
+st.write(f"Mean: {mean:.3f}")
+st.write(f"Standard Deviation: {std_dev:.3f}")
+st.write(f"UCL: {ucl:.3f}")
+st.write(f"LCL: {lcl:.3f}")
 
-    ax.set_title(f"SPC Chart for {selected_machine}")
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Deviation (mm)")
-    ax.legend()
-    ax.tick_params(axis='x', rotation=45)
-    st.pyplot(fig)
+# Plot with UCL/LCL
+fig, ax = plt.subplots()
+ax.plot(df['Timestamp'], df['Recorded Dimension'], marker='o', label='Recorded')
+ax.axhline(mean, color='green', linestyle='--', label='Mean')
+ax.axhline(ucl, color='red', linestyle='--', label='UCL (+3σ)')
+ax.axhline(lcl, color='red', linestyle='--', label='LCL (-3σ)')
+ax.set_xlabel("Timestamp")
+ax.set_ylabel("Dimension (mm)")
+ax.set_title("SPC Chart")
+ax.legend()
+st.pyplot(fig)
+
 else:
     st.info("No data for this machine yet.")
